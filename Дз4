@@ -8,7 +8,7 @@ def words_counter(x):
     return count_words
 
 def replacer(x):
-    rep = x.replace(input('Введите заменяемый символ '), '😐')
+    rep = x.replace(input('Введите заменяемый символ '), '😎')
     return rep
 
 def split(x):
