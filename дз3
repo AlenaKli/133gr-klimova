@@ -1,0 +1,68 @@
+
+import random
+import time
+
+strtrng = 0
+endrng = 100
+lenth_array = 100
+array = []
+array_bubble=[]
+array_quick=[]
+array_shaker=[]
+
+for i in range(strtrng, endrng):
+    num = random.randint(1, lenth_array)
+    array.append(num)
+    array_bubble.append(num)
+    array_quick.append(num)
+    array_shaker.append(num)
+
+
+def bubblesort(x):
+    for i in range(endrng-1):
+        for j in range(endrng-i-1):
+            if x[j] > x[j+1]:
+                x[j], x[j+1] = x[j+1], x[j]            
+    return x
+
+def shakersort(x):
+    n = len(x)
+    left = 0
+    right = n - 1
+    while left <= right:
+        for i in range(left, right):
+            if x[i] > x[i+1]:
+                x[i], x[i+1] = x[i+1], x[i]
+                right -= 1
+                for i in range(right, left, -1):
+                    if x[i-1] > x[i]:
+                        x[i], x[i-1] = x[i-1], x[i]
+                        left += 1
+        return x                
+
+def quicksort(x):
+   if len(x) <= 1:
+       return x
+   else:
+       q = random.choice(x)
+   l_x = [n for n in x if n < q]
+   e_x = [q] * x.count(q)
+   b_x = [n for n in x if n > q]
+   return quicksort(l_x) + e_x + quicksort(b_x)
+
+start_bubble = time.time()
+print('пузырьковая -', bubblesort(array_bubble))
+end_bubble = time.time() - start_bubble
+print('время выполнения -', end_bubble, 'секунд')
+print("\033[44m")
+
+start_quick = time.time()
+print('быстрая-', quicksort(array_quick))
+end_quick = time.time() - start_quick
+print('время выполнения -', end_quick, 'секунд')
+print("\033[45m")
+
+start_shacker = time.time()
+print('шейкер-', shakersort(array_shaker))
+end_shacker = time.time() - start_shacker
+print('время выполнения  -', end_shacker, 'секунд')
