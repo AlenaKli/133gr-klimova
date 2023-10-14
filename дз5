@@ -1,0 +1,15 @@
+import random
+
+# делаем случайный символ
+def generate_random_character():
+    random_num = random.randint(32, 126) 
+    return chr(random_num) #случайные числа преобразуются в символы
+
+# Генерация строки 
+random_string = ''.join([generate_random_character() for _ in range(1000)])
+
+# Запись строки в файл
+with open('random_string.txt', 'w') as file:
+    file.write(random_string)
+
+print("вот файл - random_string.txt")
