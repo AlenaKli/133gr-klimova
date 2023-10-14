@@ -1,0 +1,43 @@
+#если надо
+#pip install requests beautifulsoup4
+import requests
+from bs4 import BeautifulSoup
+
+# URL страницы
+link = "https://habr.com/ru/articles/top/weekly/"
+
+# Отправляем запрос для получения HTMLкода страницы
+response = requests.get(link)
+
+# успешно? проверяем 
+if response.status_code == 200:
+    # Создаем объект BeautifulSoup для парсинга HTML
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # находим заголовки статей
+    article_titles = soup.find_all('h2', class_='post__title')
+
+    # перебираем заголовки и сохраняем статьи
+    for article_title in article_titles:
+        # находим ссылку на статью внутри заголовка
+        article_link = article_title.find('a')['href']
+
+        # делаем запрос для получения HTMLкода статьи
+        article_response = requests.get(article_link)
+
+        # успешно? проверяем 
+        if article_response.status_code == 200:
+            # Создаем объект BeautifulSoup для парсинга HTML статьи
+            article_soup = BeautifulSoup(article_response.text, 'html.parser')
+
+            # достаем заголовок статьи
+            article_title = article_soup.find('span', class_='post__title-text').text
+
+            # Создаем HTMLфайл для сохранения статьи
+            with open(f"{article_link.split('/')[-2]}.html", "w", encoding='utf-8') as article_file:
+                article_file.write(article_response.text)
+
+            print(f"Статья '{article_title}' сохранена в файле {article_link.split('/')[-2]}.html")
+
+else:
+    print("Ошибка при получении страницы")
