@@ -1,0 +1,31 @@
+import requests
+
+def synthesize_speech(text):
+    url = 'https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize'
+    headers = {
+        'Authorization': 'Bearer YOUR_API_KEY',
+    }
+    data = {
+        'text': text,
+        'lang': 'ru-RU',
+        'voice': 'oksana',
+        'emotion': 'neutral',
+        'format': 'wav',
+        'sampleRateHertz': '48000',
+    }
+    response = requests.post(url, headers=headers, data=data)
+    
+    # Успешно?
+    if response.status_code == 200:
+        file_name = 'speech.wav'
+        with open(file_name, 'wb') as f:
+            f.write(response.content)
+        print(f"успешно, на тебе {file_name}")
+    else:
+        print(f"Ошибка  {response.status_code} - {response.text}")
+
+
+text = 'ком танцен ихвильнихт ком дринкен ихвидьнихт'
+     
+
+synthesize_speech(text)
