@@ -1,0 +1,32 @@
+import sqlite3
+
+# Подключение к базе данных
+conn = sqlite3.connect('Chinook_Sqlite.sqlite')
+cursor = conn.cursor()
+
+# Получение id 
+customer_id = int(input("Введите id Customer: "))
+
+# Формирование SQL-запроса
+query = '''
+    SELECT Track.Name
+    FROM Customer
+    INNER JOIN Invoice
+    ON Customer.CustomerId = Invoice.CustomerId
+    INNER JOIN InvoiceLine
+    ON Invoice.InvoiceId = InvoiceLine.InvoiceId
+    INNER JOIN Track
+    ON InvoiceLine.TrackId = Track.TrackId
+    WHERE Customer.CustomerId = ?
+'''
+
+# Выполнение запроса
+cursor.execute(query, (customer_id,))
+tracks = cursor.fetchall()
+
+# Печать названий треков
+for track in tracks:
+    print(track[0])
+
+# Закрытие соединения с базой данных
+conn.close()
