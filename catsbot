@@ -1,0 +1,40 @@
+import asyncio
+import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters.command import Command
+from aiogram.types import Message
+import requests
+
+
+API_TOKEN = '6661680130:AAHfrkoNfGy6z2GdvbyPBDAt1oc33QqDa5o'
+
+# фигня какая то
+logging.basicConfig(level=logging.INFO)
+
+#  бота и диспетчер
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher()
+
+# Функция для получения случайной картинки котика
+def get_cat_image():
+    response = requests.get('https://api.thecatapi.com/v1/images/search')
+    data = response.json()
+    return data[0]['url']
+
+# Обработчик команды /start
+@dp.message(Command("start"))
+async def send_welcome(message: types.Message):
+    await message.reply("Привет! Нажми /cat чтобы получить картинку котика!")
+
+# Обработчик команды /cat
+@dp.message(Command("cat"))
+async def send_cat(message: types.Message):
+    cat_image_url = get_cat_image()
+    await message.reply_photo(cat_image_url)
+
+# Запуск бота
+async def main():
+    await dp.start_polling(bot)
+
+if name == "main":
+    asyncio.run(main())
